@@ -1,0 +1,103 @@
+.hui-modal {
+  border-radius: 2px;
+  position: fixed;
+  background-color: #fff;
+
+  > .hui-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 24px;
+    color: rgba(0, 0, 0, .85);
+    border-bottom: 1px solid #f0f0f0;
+
+    > .hui-modal-title {
+      font-weight: 500;
+    }
+
+    > .hui-modal-close-icon {
+      width: 16px;
+      height: 16px;
+      cursor: pointer;
+      fill: rgba(0, 0, 0, .45);
+    }
+
+  }
+
+  > .hui-modal-content {
+    padding: 24px;
+    font-size: 14px;
+  }
+
+  > .hui-modal-footer {
+    padding: 10px 16px;
+    border-top: 1px solid #f0f0f0;
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  &.hui-modal-hidden {
+    display: none;
+  }
+}
+
+.hui-modal-mask {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, .35);
+}
+
+.hui-btn {
+  line-height: 1.5715;
+  position: relative;
+  display: inline-block;
+  font-weight: 400;
+  white-space: nowrap;
+  text-align: center;
+  -webkit-box-shadow: 0 2px 0 rgba(0, 0, 0, .015);
+  box-shadow: 0 2px 0 rgba(0, 0, 0, .015);
+  cursor: pointer;
+  -webkit-transition: all .3s cubic-bezier(.645, .045, .355, 1);
+  transition: all .3s cubic-bezier(.645, .045, .355, 1);
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -ms-touch-action: manipulation;
+  touch-action: manipulation;
+  height: 32px;
+  padding: 4px 15px;
+  font-size: 14px;
+  border-radius: 2px;
+  color: rgba(0, 0, 0, .85);
+  background: #fff;
+  border: 1px solid #d9d9d9;
+  outline: 0;
+
+  &:active, &:focus, &:hover {
+    outline: 0;
+    color: #40a9ff;
+    background: #fff;
+    border-color: #40a9ff;
+  }
+
+  &.hui-btn-primary {
+    color: #fff;
+    background: #1890ff;
+    border-color: #1890ff;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, .12);
+    -webkit-box-shadow: 0 2px 0 rgba(0, 0, 0, .045);
+    box-shadow: 0 2px 0 rgba(0, 0, 0, .045);
+
+    &:active, &:focus, &:hover {
+      color: #fff;
+      background: #40a9ff;
+      border-color: #40a9ff;
+    }
+  }
+}
