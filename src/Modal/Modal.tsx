@@ -1,4 +1,5 @@
 import React, { CSSProperties, ReactNode, useState, useRef, useEffect } from 'react';
+import ReactDOM from 'react-dom';
 import './Modal.scss';
 import classnames from 'classnames';
 
@@ -22,6 +23,9 @@ export interface ModalProps {
   onOk?: () => any;
   okText?: string;
   cancelText?: string;
+  getContainer?: HTMLElement | boolean;
+  draggable?: boolean;
+  content?: string | ReactNode
 }
 
 interface ElementProps {
@@ -56,6 +60,9 @@ const Modal: React.FC<ModalProps> = props => {
     onCancel,
     okText,
     cancelText,
+    getContainer,
+    draggable,
+    content
   } = props;
   const [viewport, setViewport] = useState<ElementProps>({
     width: document.body.clientWidth || document.documentElement.clientWidth,
@@ -113,6 +120,9 @@ const Modal: React.FC<ModalProps> = props => {
    * @param e
    */
   const onMouseDown = (e: React.MouseEvent) => {
+    if (!draggable) { // 说明不想拖动
+      return;
+    }
     const eleX = (modalRootNode.current as HTMLDivElement).getBoundingClientRect().x; // 元素相对于视口的位置的x
     const eleY = (modalRootNode.current as HTMLDivElement).getBoundingClientRect().y;  // 元素相对于视口的位置的y
     modalRootNodePosition.current.x = eleX;
@@ -187,72 +197,140 @@ const Modal: React.FC<ModalProps> = props => {
     left: left ? left : viewport.width / 2 - rootElement.width / 2,
     top: centered ? viewport.height / 2 - rootElement.height / 2 : top,
   };
+
   return (
-    <>
-      {
-        mask && visible ?
-          <div
-            className="hui-modal-mask"
-            style={{
-              zIndex: zIndex,
-              opacity: maskOpacity,
-            }}/>
-          :
-          null
-      }
-      <div ref={modalRootNode} className={classes} style={modalStyle}>
-        <div className="hui-modal-header" onMouseDown={onMouseDown}>
-          <div className="hui-modal-title">{title}</div>
-          {
-            closable ?
-              <div className="hui-modal-close-icon" onClick={closeModal}>
-                {
-                  closeIcon ?
-                    closeIcon
-                    :
-                    <svg viewBox="0 0 1024 1024" version="1.1"
-                         xmlns="http://www.w3.org/2000/svg">
-                      <path
-                        d="M589.312 523.776l407.04-407.04c20.48-20.48 20.48-54.272 0-74.752l-2.048-2.048c-20.48-20.48-54.272-20.48-74.752 0L512 446.976 104.96 39.936c-20.48-20.48-54.272-20.48-74.752 0l-2.048 2.048c-20.992 20.48-20.992 54.272 0 74.752L435.2 523.776 28.16 930.816c-20.48 20.48-20.48 54.272 0 74.752l2.048 2.048c20.48 20.48 54.272 20.48 74.752 0l407.04-407.04 407.04 407.04c20.48 20.48 54.272 20.48 74.752 0l2.048-2.048c20.48-20.48 20.48-54.272 0-74.752l-406.528-407.04z"
-                      />
-                    </svg>
-                }
-              </div>
-              :
-              null
-          }
-        </div>
-        <div className="hui-modal-content">
-          {
-            destroyOnClose ?
-              visible ?
-                children
+    getContainer === false ?
+      <div className="hui-modal-root">
+        {
+          mask && visible ?
+            <div
+              className="hui-modal-mask"
+              style={{
+                zIndex: zIndex,
+                opacity: maskOpacity,
+              }}/>
+            :
+            null
+        }
+        <div ref={modalRootNode} className={classes} style={modalStyle}>
+          <div className="hui-modal-header" onMouseDown={onMouseDown}>
+            <div className="hui-modal-title">{title}</div>
+            {
+              closable ?
+                <div className="hui-modal-close-icon" onClick={closeModal}>
+                  {
+                    closeIcon ?
+                      closeIcon
+                      :
+                      <svg viewBox="0 0 1024 1024" version="1.1"
+                           xmlns="http://www.w3.org/2000/svg">
+                        <path
+                          d="M589.312 523.776l407.04-407.04c20.48-20.48 20.48-54.272 0-74.752l-2.048-2.048c-20.48-20.48-54.272-20.48-74.752 0L512 446.976 104.96 39.936c-20.48-20.48-54.272-20.48-74.752 0l-2.048 2.048c-20.992 20.48-20.992 54.272 0 74.752L435.2 523.776 28.16 930.816c-20.48 20.48-20.48 54.272 0 74.752l2.048 2.048c20.48 20.48 54.272 20.48 74.752 0l407.04-407.04 407.04 407.04c20.48 20.48 54.272 20.48 74.752 0l2.048-2.048c20.48-20.48 20.48-54.272 0-74.752l-406.528-407.04z"
+                        />
+                      </svg>
+                  }
+                </div>
                 :
                 null
+            }
+          </div>
+          <div className="hui-modal-content">
+            {
+              destroyOnClose ?
+                visible ?
+                  content ? content : children
+                  :
+                  null
+                :
+                content ? content : children
+            }
+          </div>
+          {
+            footer === null ?
+              null
               :
-              children
+              <div className="hui-modal-footer">
+                {
+                  footer ?
+                    footer
+                    :
+                    <>
+                      <button className="hui-btn" onClick={closeModal}>{cancelText}</button>
+                      <button style={{ marginLeft: '8px' }} className="hui-btn hui-btn-primary"
+                              onClick={confirmBtnClick}>{okText}
+                      </button>
+                    </>
+                }
+              </div>
           }
         </div>
-        {
-          footer === null ?
-            null
-            :
-            <div className="hui-modal-footer">
-              {
-                footer ?
-                  footer
-                  :
-                  <>
-                    <button className="hui-btn" onClick={closeModal}>{cancelText}</button>
-                    <button style={{ marginLeft: '8px' }} className="hui-btn hui-btn-primary"
-                            onClick={confirmBtnClick}>{okText}
-                    </button>
-                  </>
-              }
-            </div>
-        }
       </div>
-    </>
+      :
+      ReactDOM.createPortal(<div className="hui-modal-root">
+        {
+          mask && visible ?
+            <div
+              className="hui-modal-mask"
+              style={{
+                zIndex: zIndex,
+                opacity: maskOpacity,
+              }}/>
+            :
+            null
+        }
+        <div ref={modalRootNode} className={classes} style={modalStyle}>
+          <div className="hui-modal-header" onMouseDown={onMouseDown}>
+            <div className="hui-modal-title">{title}</div>
+            {
+              closable ?
+                <div className="hui-modal-close-icon" onClick={closeModal}>
+                  {
+                    closeIcon ?
+                      closeIcon
+                      :
+                      <svg viewBox="0 0 1024 1024" version="1.1"
+                           xmlns="http://www.w3.org/2000/svg">
+                        <path
+                          d="M589.312 523.776l407.04-407.04c20.48-20.48 20.48-54.272 0-74.752l-2.048-2.048c-20.48-20.48-54.272-20.48-74.752 0L512 446.976 104.96 39.936c-20.48-20.48-54.272-20.48-74.752 0l-2.048 2.048c-20.992 20.48-20.992 54.272 0 74.752L435.2 523.776 28.16 930.816c-20.48 20.48-20.48 54.272 0 74.752l2.048 2.048c20.48 20.48 54.272 20.48 74.752 0l407.04-407.04 407.04 407.04c20.48 20.48 54.272 20.48 74.752 0l2.048-2.048c20.48-20.48 20.48-54.272 0-74.752l-406.528-407.04z"
+                        />
+                      </svg>
+                  }
+                </div>
+                :
+                null
+            }
+          </div>
+          <div className="hui-modal-content">
+            {
+              destroyOnClose ?
+                visible ?
+                  content ? content : children
+                  :
+                  null
+                :
+                content ? content : children
+            }
+          </div>
+          {
+            footer === null ?
+              null
+              :
+              <div className="hui-modal-footer">
+                {
+                  footer ?
+                    footer
+                    :
+                    <>
+                      <button className="hui-btn" onClick={closeModal}>{cancelText}</button>
+                      <button style={{ marginLeft: '8px' }} className="hui-btn hui-btn-primary"
+                              onClick={confirmBtnClick}>{okText}
+                      </button>
+                    </>
+                }
+              </div>
+          }
+        </div>
+      </div>, (getContainer as HTMLElement))
   );
 };
 
@@ -265,10 +343,12 @@ Modal.defaultProps = {
   mask: true, // 是否显示遮罩层
   maskOpacity: 1, // 遮罩层的透明度
   zIndex: 1100,
-  centered: true,
-  top: 200,
+  centered: true, // 是否垂直居中显示
+  top: 200, // 距离视口顶部的距离，centered为true的时候，top失效
   okText: '确认',
   cancelText: '取消',
+  getContainer: document.body, // 指定Modal挂载到哪个HTML节点上，默认是直接挂载到Body标签内部，值为false的时候挂载到当前节点上。
+  draggable: true,
 };
 
 export default Modal;

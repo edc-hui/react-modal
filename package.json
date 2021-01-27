@@ -1,28 +1,32 @@
 {
-  "name": "react-modal",
+  "name": "@hui/react-modal",
   "version": "0.1.0",
   "private": false,
-  "dependencies": {
-    "@testing-library/jest-dom": "^5.11.4",
-    "@testing-library/react": "^11.1.0",
-    "@testing-library/user-event": "^12.1.10",
-    "@types/jest": "^26.0.15",
-    "@types/node": "^12.0.0",
-    "@types/react": "^16.9.53",
-    "@types/react-dom": "^16.9.8",
-    "classnames": "^2.2.6",
-    "react": "^17.0.1",
-    "react-dom": "^17.0.1",
-    "react-scripts": "4.0.1",
-    "typescript": "^4.0.3",
-    "web-vitals": "^0.2.4"
-  },
+  "description": "基于typescript + react hook 封装的可拖动弹框Modal",
+  "dependencies": {},
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "clean": "rimraf ./dist",
+    "build": "yarn clean && yarn dist-ts && yarn dist-css",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "dist-ts": "tsc -p tsconfig.build.json",
+    "dist-css": "node-sass ./src/Modal/Modal.scss ./dist/index.css",
+    "prepublish": "npm run build"
   },
+  "author": {
+    "name": "惠思雨",
+    "email": "edc-hui@outlook.com"
+  },
+  "keywords": [
+    "modal",
+    "react-modal",
+    "dialog",
+    "react-dialog"
+  ],
+  "files": [
+    "dist/"
+  ],
+  "license": "MIT",
   "eslintConfig": {
     "extends": [
       "react-app",
@@ -42,7 +46,23 @@
     ]
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "^5.11.4",
+    "@testing-library/react": "^11.1.0",
+    "@testing-library/user-event": "^12.1.10",
     "@types/classnames": "^2.2.11",
-    "node-sass": "4.14.1"
+    "@types/jest": "^26.0.15",
+    "@types/node": "^12.0.0",
+    "@types/react": "^16.9.53",
+    "@types/react-dom": "^16.9.8",
+    "node-sass": "4.14.1",
+    "react-scripts": "4.0.1",
+    "rimraf": "^3.0.2",
+    "typescript": "^4.0.3",
+    "web-vitals": "^0.2.4"
+  },
+  "peerDependencies": {
+    "classnames": "^2.2.6",
+    "react": ">=16.9.0",
+    "react-dom": ">=16.9.0"
   }
 }
