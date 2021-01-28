@@ -19,6 +19,10 @@
     "name": "惠思雨",
     "email": "edc-hui@outlook.com"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/edc-hui/react-modal"
+  },
   "keywords": [
     "modal",
     "react-modal",
