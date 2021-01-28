@@ -1,9 +1,11 @@
 {
-  "name": "@hui/react-modal",
+  "name": "@huisiyu/react-modal",
   "version": "0.1.0",
   "private": false,
   "description": "基于typescript + react hook 封装的可拖动弹框Modal",
-  "dependencies": {},
+  "dependencies": {
+    "classnames": "^2.2.6"
+  },
   "scripts": {
     "start": "react-scripts start",
     "clean": "rimraf ./dist",
@@ -61,7 +63,6 @@
     "web-vitals": "^0.2.4"
   },
   "peerDependencies": {
-    "classnames": "^2.2.6",
     "react": ">=16.9.0",
     "react-dom": ">=16.9.0"
   }
